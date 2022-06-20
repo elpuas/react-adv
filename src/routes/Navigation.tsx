@@ -6,6 +6,7 @@ import {
 } from 'react-router-dom';
 
 import logo from '../logo.svg';
+import RegisterPage from '../03-forms/pages/RegisterPage';
 
 export const Navigation = () => {
   return (
@@ -23,12 +24,18 @@ export const Navigation = () => {
             <li>
               <NavLink to="/users" activeClassName="nav-active" exact>Users</NavLink>
             </li>
+            <li>
+              <NavLink to="/register" activeClassName="nav-active" exact>Register</NavLink>
+            </li>
           </ul>
         </nav>
 
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
         <Switch>
+        <Route path="/register">
+            <RegisterPage />
+          </Route>
           <Route path="/about">
             <h1>About</h1>
           </Route>
