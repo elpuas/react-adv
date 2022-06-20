@@ -1,27 +1,29 @@
-import React from 'react'
 import '../styles/styles.css';
-import { useState, ChangeEvent, FormEvent } from 'react';
+import { FormEvent } from 'react';
+import { useForm } from '../hooks/useForm';
 
 export default function RegisterPage() {
 
-    const [registerData, setRegisterData] = useState({
-        name: '',
-        email: '',
-        password: '',
-        confirmPassword: ''
+    const {
+        confirmPassword,
+        email,
+        formData,
+        isValidEmail,
+        name,
+        onChange,
+        password,
+        resetForm,
+    } = useForm({
+            name: '',
+            email: '',
+            password: '',
+            confirmPassword: ''
     });
-
-    const { name, email, password, confirmPassword } = registerData;
-
-    // event type React.ChangeEvent.
-    const onChange = (event:ChangeEvent<HTMLInputElement>) => {
-        setRegisterData({ ...registerData, [event.target.name]: event.target.value });
-    }
 
     // event type React.FormEvent.
     const onSubmit = (event:FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        console.log(registerData);
+        console.log(formData);
     }
 
     return (
@@ -35,7 +37,9 @@ export default function RegisterPage() {
                     name='name'
                     value={name}
                     onChange={onChange}
+                    className={ `${name.trim().length <= 0 && 'has-error'}` }
                 />
+                { name.trim().length <= 0 && <span>This Field is Mandatory</span> }
 
                 <input
                     type="email"
@@ -43,7 +47,9 @@ export default function RegisterPage() {
                     name='email'
                     value={email}
                     onChange={onChange}
+                    className={ `${ !isValidEmail(email) && 'has-error'}` }
                 />
+                { !isValidEmail(email) && <span>This Field is Invalid</span> }
 
                 <input
                     type="password"
@@ -53,6 +59,9 @@ export default function RegisterPage() {
                     onChange={onChange}
                 />
 
+                { password.trim().length <= 0 && <span>This Field is Mandatory</span> }
+                { password.trim().length < 6 && password.trim().length > 0 && <span> Password has to be with a minimum of 6 characters </span> }
+
                 <input
                     type="password"
                     placeholder='confirm password'
@@ -61,8 +70,11 @@ export default function RegisterPage() {
                     onChange={ (ev) => onChange(ev)}
                 />
 
-                <button type="submit">Register</button>
+                { confirmPassword.trim().length <= 0 && <span>This Field is Mandatory</span> }
+                { confirmPassword.trim().length > 0 && password !== confirmPassword && <span>Passwords Match</span> }
 
+                <button type="submit">Register</button>
+                <button type="button" onClick={resetForm}>Reset Form</button>
 
             </form>
 
